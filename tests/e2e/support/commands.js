@@ -10,7 +10,20 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
+Cypress.Commands.add('login', (username, password) => {
+  cy.visit('http://localhost:8080/#/login')
+  cy.get('#userName').type(username)
+  cy.get('#password').type(password)
+  cy.server()
+  cy.route({
+    method: 'POST',
+    url: 'http://localhost:8080/api/v1/user/login'
+  }).as('login')
+  cy.get('button').click()
+  cy.wait('@login').then(res => {
+    expect(res.response.body.error).to.eq(0)
+  })
+})
 //
 //
 // -- This is a child command --

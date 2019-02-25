@@ -1,6 +1,9 @@
 // https://docs.cypress.io/api/introduction/api.html
 
 describe('登录页-测试', () => {
+  beforeEach(() => {
+    cy.login('root01', 'a123456')
+  })
   // it('不输入帐号和密码，显示错误提示！', () => {
   //   cy.visit('http://localhost:8080/#/login')
   //   cy.get('button').click()
@@ -23,20 +26,23 @@ describe('登录页-测试', () => {
   // })
 
   it('帐号和密码正确，成功登录！', () => {
-    cy.visit('http://localhost:8080/#/login')
-    cy.get('#userName').type('root01')
-    cy.get('#password').type('a123456')
-    cy.server()
-    cy.route({
-      method: 'POST',
-      url: 'http://localhost:8080/api/v1/user/login'
-    }).as('login')
-    cy.get('button').click()
+    // cy.visit('http://localhost:8080/#/login')
+    // cy.get('#userName').type('root01')
+    // cy.get('#password').type('a123456')
+    // cy.server()
+    // cy.route({
+    //   method: 'POST',
+    //   url: 'http://localhost:8080/api/v1/user/login'
+    // }).as('login')
+    // cy.get('button').click()
 
-    cy.wait('@login').then(res => {
-      expect(res.response.body.error).to.eq(0)
-    })
+    // cy.wait('@login').then(res => {
+    //   expect(res.response.body.error).to.eq(0)
+    // })
     cy.get('.ivu-menu >.ivu-menu-item:eq(0)').click()
     cy.get('.ivu-table-row').should('have.length.least', 1)
+    cy.get(
+      'div.showtable-area > div > div > div.ivu-table-body > table > tbody > tr:nth-child(1) > td.ivu-table-column-center > div > div > button.ivu-btn.ivu-btn-primary.ivu-btn-small'
+    ).click()
   })
 })
